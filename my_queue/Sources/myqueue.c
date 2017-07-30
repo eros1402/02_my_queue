@@ -18,30 +18,31 @@
 #include "myqueue.h"
 
 /*
- * The real definition of 'struct queue'
+ * The real definition of 'a queue struct'
  */ 
 struct queue {
-  element_t *arr; // dynamic array containing data elements
-  int current_size; // Counts number of elements in the queue
-  int front, rear;
+  element_t *arr; 	// dynamic array containing data elements
+  int current_size; // Counts number of current elements in the queue
+  int front, rear;	// Position of front & rear element in queue
   
   element_copy_func *element_copy;  	//callback function for clone a queue element
   element_free_func *element_free;  	//callback function for free a queue element
   element_print_func *element_print;	//callback function for print a queue element to stdout
-  // Extra fields need to be added here to make it a thread-safe queue as needed for the assignment
+
+  // Extra field to make it a thread-safe queue
   pthread_mutex_t data_mutex;  			// For thread-safe
 };
 
 void mem_alloc_check(void *p, char *msg) {
 	if(p == NULL) {
-		fprintf(stderr, "\n%s: memory alloc error\n", msg);
+		fprintf(stderr, "\n%s: memory allocation error\n", msg);
 		exit(-1);
 	}
 }
 
 void queue_check(queue_t* queue, char *msg) {
 	if(queue == NULL) {
-		fprintf(stderr, "\n%s: queue input is NULL\n", msg);		
+		fprintf(stderr, "\n%s: input pointer is NULL\n", msg);
 		exit(-1);        
 	}
 }
@@ -62,10 +63,10 @@ queue_t* queue_create(element_copy_func *element_copy, element_free_func *elemen
 {	
   // implementation goes here	
 	queue_t* myqueue;	
-	myqueue = (queue_t *) malloc(sizeof(queue_t)); // Queue allocated	
+	myqueue = (queue_t *) malloc(sizeof(queue_t)); // Queue memory allocated
 	if(myqueue == NULL) {return NULL;}	
 	myqueue->arr = (element_t *) malloc(QUEUE_SIZE*sizeof(element_t));
-	mem_alloc_check((element_t *) myqueue->arr, "malloc() return NULL");
+	mem_alloc_check((element_t *) myqueue->arr, "queue_create() : Cannot allocate memory or Not enough memory for queue elements");
 	myqueue->current_size = 0;
 	myqueue->front = 0;
 	myqueue->rear = -1;		
@@ -85,11 +86,10 @@ queue_t* queue_create(element_copy_func *element_copy, element_free_func *elemen
 void queue_free(queue_t** queue)
 {
 	// Check if the queue is NULL
-	queue_check(*queue, "Error queue_free()");		
+	queue_check(*queue, "queue_free()");
 	int i=0;
-	// Check if the queue is empty
-	if((*queue)->current_size != 0)
-	{	  
+	// Check if the queue is not empty
+	if((*queue)->current_size != 0)	{
 		// free element in each node of the queue	
 		for(i = 0; i < QUEUE_SIZE; i++) {
 			if((*queue)->arr[i] != NULL) {
@@ -211,7 +211,7 @@ void queue_dequeue(queue_t* queue)
 void queue_print(queue_t *queue)
 {
   // implementation goes here  
-  queue_check(queue, "Error queue_print()");
+  queue_check(queue, "queue_print()");
   if(queue->current_size == 0) {	  
 	  printf("Queue is empty !!!\n");	
 	  return;

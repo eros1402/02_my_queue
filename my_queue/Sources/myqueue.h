@@ -8,9 +8,12 @@
  	 	 	   First come, First serve structure ( or FIFO)
  	 	 	   Dynamic memory
  	 	 	   Thread-safe
- Note 	     : User can define QUEUE_SIZE to set the maximum
+ Note 	     : 1) User can define QUEUE_SIZE to set the maximum
 	 	 	   size of the queue. In default, QUEUE_SIZE = 15
-
+			   2) User must implement 3 void functions to work with this API:
+			   - A copy function : to read out an element in Queue
+			   - A free function : to free(delete) an element in Queue
+			   - A print function: to print out an element to stdout
  ============================================================================
  */
 
@@ -24,12 +27,11 @@
     #define QUEUE_SIZE 15
 #endif
 
-extern int allowed_overide_flag; // This flag is defined by user
+extern int allowed_overwrite_flag; // This flag is defined by user
 
 /*
- **  Make some changes here to define the type of element that will be stored in the queue
+ **  Define the type of element as void (can be any type) that will be stored in the queue
  */
-
 typedef void* element_t;
 typedef struct queue queue_t;
 
