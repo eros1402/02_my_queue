@@ -1,14 +1,30 @@
+/*
+ ============================================================================
+ Name        : myqueue.h
+ Author      : cph
+ Version     : 2.1
+ Copyright   : Copyright from Chi Pham Hoang
+ Description : Implementation of a data queue
+ 	 	 	   First come, First serve structure ( or FIFO)
+ 	 	 	   Dynamic memory
+ 	 	 	   Thread-safe
+ Note 	     : User can define QUEUE_SIZE to set the maximum
+	 	 	   size of the queue. In default, QUEUE_SIZE = 15
+
+ ============================================================================
+ */
+
 #ifndef MYQUEUE_
 #define MYQUEUE_
 
 /*
- ** The default queue size is 5
+ ** The default queue size is 15
  */
 #ifndef QUEUE_SIZE
     #define QUEUE_SIZE 15
 #endif
 
-extern int allowed_overide_flag;
+extern int allowed_overide_flag; // This flag is defined by user
 
 /*
  **  Make some changes here to define the type of element that will be stored in the queue
@@ -32,9 +48,10 @@ queue_t* queue_create(element_copy_func *element_copy, element_free_func *elemen
 
 /*  
  **  Add an element to the queue
- **  Does nothing if queue is full
+ **  If queue is full, do nothing when QUEUE_OVERIDE_FLAG = 0
+ **                  & overwrite the rear element when QUEUE_OVEWRITE_FLAG = 1
  */
-void queue_enqueue(queue_t* queue, element_t element);
+void queue_enqueue(queue_t* queue, element_t element, const int QUEUE_OVEWRITE_FLAG);
 
 /*
  **  Delete the queue from memory; set queue to NULL

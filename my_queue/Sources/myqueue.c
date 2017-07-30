@@ -1,12 +1,15 @@
-/*******************************************************************************
-* FILENAME: myqueue.c							       
-*
-* Version V1.1		
-* Author: Pham Hoang Chi
-*
-* An implementation of Lab 4 assignment - System Software Course
-* 
-*******************************************************************************/
+/*
+ ============================================================================
+ Name        : myqueue.c
+ Author      : cph
+ Version     : 2.1
+ Copyright   : Copyright from Chi Pham Hoang
+ Description : Implementation of a data queue
+ 	 	 	   First come, First serve structure ( or FIFO)
+ 	 	 	   Dynamic memory
+ 	 	 	   Thread-safe
+ ============================================================================
+ */
 
 #define _GNU_SOURCE
 #include <stdio.h>
@@ -22,11 +25,11 @@ struct queue {
   int current_size; // Counts number of elements in the queue
   int front, rear;
   
-  element_copy_func *element_copy; //callback function
-  element_free_func *element_free;  
-  element_print_func *element_print;
-  // Remark for later: extra fields need to be added here to make it a thread-safe queue as needed for the assignment 
-  pthread_mutex_t data_mutex;  
+  element_copy_func *element_copy;  	//callback function for clone a queue element
+  element_free_func *element_free;  	//callback function for free a queue element
+  element_print_func *element_print;	//callback function for print a queue element to stdout
+  // Extra fields need to be added here to make it a thread-safe queue as needed for the assignment
+  pthread_mutex_t data_mutex;  			// For thread-safe
 };
 
 void mem_alloc_check(void *p, char *msg) {
@@ -106,7 +109,7 @@ void queue_free(queue_t** queue)
  **  (Does nothing if queue is full)
  **  Update 22-Jul-15: If the queue is full, overide the the rear when the allowed flag is set. Otherwise, do nothing
  */
-void queue_enqueue(queue_t* queue, element_t element)
+void queue_enqueue(queue_t* queue, element_t element, const int QUEUE_OVEWRITE_FLAG)
 {
 	int presult;
   // implementation goes here
@@ -117,8 +120,7 @@ void queue_enqueue(queue_t* queue, element_t element)
 	
 	if(queue->current_size == QUEUE_SIZE) {		
 		// printf("Queue is full !!!\n");
-//		if(allowed_overide_flag) {
-		if(1) {
+		if(QUEUE_OVEWRITE_FLAG) {
 			// free the current rear
 			queue->element_free(&(queue->arr[queue->rear]));
 			// overide the current rear
