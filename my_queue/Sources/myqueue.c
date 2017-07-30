@@ -117,7 +117,8 @@ void queue_enqueue(queue_t* queue, element_t element)
 	
 	if(queue->current_size == QUEUE_SIZE) {		
 		// printf("Queue is full !!!\n");
-		if(allowed_overide_flag) {
+//		if(allowed_overide_flag) {
+		if(1) {
 			// free the current rear
 			queue->element_free(&(queue->arr[queue->rear]));
 			// overide the current rear
