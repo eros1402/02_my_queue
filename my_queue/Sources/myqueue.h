@@ -20,12 +20,12 @@
 #ifndef MYQUEUE_
 #define MYQUEUE_
 
-/*
- ** The default queue size is 15
- */
-#ifndef QUEUE_SIZE
-    #define QUEUE_SIZE 15
-#endif
+///*
+// ** The default queue size is 15
+// */
+//#ifndef QUEUE_SIZE
+//    #define QUEUE_SIZE 15
+//#endif
 
 extern int allowed_overwrite_flag; // This flag is defined by user
 
@@ -45,8 +45,7 @@ typedef void element_print_func(element_t);
  **  Return a pointer to the newly created queue
  **  Returns NULL if queue creation failed
  */
-// queue_t* queue_create();
-queue_t* queue_create(element_copy_func *element_copy, element_free_func *element_free, element_print_func *element_print);
+queue_t* queue_create(const int QUEUE_SIZE, element_copy_func *element_copy, element_free_func *element_free, element_print_func *element_print);
 
 /*  
  **  Add an element to the queue

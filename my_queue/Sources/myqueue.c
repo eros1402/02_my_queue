@@ -22,6 +22,7 @@
  */ 
 struct queue {
   element_t *arr; 	// dynamic array containing data elements
+  int max_size;		// maximum size of the queue
   int current_size; // Counts number of current elements in the queue
   int front, rear;	// Position of front & rear element in queue
   
@@ -59,12 +60,13 @@ void pthread_check( int err_code, char *msg, char *file_name, int line_nr )
  **  Return a pointer to the newly created queue
  **  Returns NULL if queue creation failed
  */
-queue_t* queue_create(element_copy_func *element_copy, element_free_func *element_free, element_print_func *element_print)
+queue_t* queue_create(const int QUEUE_SIZE, element_copy_func *element_copy, element_free_func *element_free, element_print_func *element_print)
 {	
   // implementation goes here	
 	queue_t* myqueue;	
 	myqueue = (queue_t *) malloc(sizeof(queue_t)); // Queue memory allocated
 	if(myqueue == NULL) {return NULL;}	
+	myqueue->max_size = QUEUE_SIZE;
 	myqueue->arr = (element_t *) malloc(QUEUE_SIZE*sizeof(element_t));
 	mem_alloc_check((element_t *) myqueue->arr, "Error queue_create()");
 	myqueue->current_size = 0;
@@ -91,7 +93,7 @@ void queue_free(queue_t** queue)
 	// Check if the queue is not empty
 	if((*queue)->current_size != 0)	{
 		// free element in each node of the queue	
-		for(i = 0; i < QUEUE_SIZE; i++) {
+		for(i = 0; i < (*queue)->max_size; i++) {
 			if((*queue)->arr[i] != NULL) {
 				(*queue)->element_free(&((*queue)->arr[i]));
 			}
@@ -118,7 +120,7 @@ void queue_enqueue(queue_t* queue, element_t element, const int QUEUE_OVEWRITE_F
 	presult = pthread_mutex_lock( &(queue->data_mutex) );	
 	pthread_check( presult, "Error queue_enqueue(): pthread_mutex_lock", __FILE__, __LINE__ );
 	
-	if(queue->current_size == QUEUE_SIZE) {		
+	if(queue->current_size == queue->max_size) {
 		// printf("Queue is full !!!\n");
 		if(QUEUE_OVEWRITE_FLAG) {
 			// free the current rear
@@ -130,7 +132,7 @@ void queue_enqueue(queue_t* queue, element_t element, const int QUEUE_OVEWRITE_F
 	else {
 		queue->current_size = queue->current_size + 1;	
 		queue->rear = queue->rear + 1;
-		if(queue->rear == QUEUE_SIZE) {
+		if(queue->rear == queue->max_size) {
 			queue->rear = 0; //circulating
 		}		
 		// Make a deep copy
@@ -192,7 +194,7 @@ void queue_dequeue(queue_t* queue)
 	if(queue->current_size != 0) {		
 		queue->element_free(&(queue->arr[queue->front]));
 		queue->front = queue->front + 1;
-		if(queue->front == QUEUE_SIZE) {
+		if(queue->front == queue->max_size) {
 			queue->front = 0; //circulating
 		}
 		queue->current_size = queue->current_size - 1;
@@ -221,16 +223,17 @@ void queue_print(queue_t *queue)
   pos= queue->front;  
   element_t e = queue->arr[pos];  
   
-  printf("Info queue_print(): Current queue (starting from the front element): \n");
+  printf("********** queue_print() (from front to rear)\n");
   
   queue->element_print(e);
   while(pos != queue->rear)  
   {
 	  pos++;	  
-	  if(pos == QUEUE_SIZE) { pos = 0;} 
+	  if(pos == queue->max_size) { pos = 0;}
 	  e = queue->arr[pos];
 	  queue->element_print(e);
   } 
+
   printf("\n");
 }
 
