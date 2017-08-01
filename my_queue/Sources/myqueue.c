@@ -66,7 +66,7 @@ queue_t* queue_create(element_copy_func *element_copy, element_free_func *elemen
 	myqueue = (queue_t *) malloc(sizeof(queue_t)); // Queue memory allocated
 	if(myqueue == NULL) {return NULL;}	
 	myqueue->arr = (element_t *) malloc(QUEUE_SIZE*sizeof(element_t));
-	mem_alloc_check((element_t *) myqueue->arr, "queue_create() : Cannot allocate memory or Not enough memory for queue elements");
+	mem_alloc_check((element_t *) myqueue->arr, "Error queue_create()");
 	myqueue->current_size = 0;
 	myqueue->front = 0;
 	myqueue->rear = -1;		
@@ -116,7 +116,7 @@ void queue_enqueue(queue_t* queue, element_t element, const int QUEUE_OVEWRITE_F
 	queue_check(queue, "Error queue_enqueue()");	
 	
 	presult = pthread_mutex_lock( &(queue->data_mutex) );	
-	pthread_check( presult, "pthread_mutex_lock", __FILE__, __LINE__ );
+	pthread_check( presult, "Error queue_enqueue(): pthread_mutex_lock", __FILE__, __LINE__ );
 	
 	if(queue->current_size == QUEUE_SIZE) {		
 		// printf("Queue is full !!!\n");
@@ -138,7 +138,7 @@ void queue_enqueue(queue_t* queue, element_t element, const int QUEUE_OVEWRITE_F
 	}
 	
 	presult = pthread_mutex_unlock( &(queue->data_mutex) );
-	pthread_check( presult, "pthread_mutex_unlock", __FILE__, __LINE__ );	
+	pthread_check( presult, "Error queue_enqueue(): pthread_mutex_unlock", __FILE__, __LINE__ );
 	// signal the condition variable
 }
 
@@ -162,17 +162,17 @@ element_t* queue_top(queue_t* queue){
 	queue_check(queue, "Error queue_top()");
 	
 	presult = pthread_mutex_lock( &(queue->data_mutex) );	
-	pthread_check( presult, "pthread_mutex_lock", __FILE__, __LINE__ );
+	pthread_check( presult, "Error queue_top(): pthread_mutex_lock", __FILE__, __LINE__ );
   	//Check if the queue is empty
   	if(queue->current_size != 0) {		
 		p = &(queue->arr[queue->front]);
 		presult = pthread_mutex_unlock( &(queue->data_mutex) );
-		pthread_check( presult, "pthread_mutex_unlock", __FILE__, __LINE__ );	
+		pthread_check( presult, "Error queue_top(): pthread_mutex_unlock", __FILE__, __LINE__ );
 		return p;
 	}
   	else {		
 		presult = pthread_mutex_unlock( &(queue->data_mutex) );
-		pthread_check( presult, "pthread_mutex_unlock", __FILE__, __LINE__ );	
+		pthread_check( presult, "Error queue_top(): pthread_mutex_unlock", __FILE__, __LINE__ );
 		return NULL;
 	}
 }
@@ -185,10 +185,10 @@ void queue_dequeue(queue_t* queue)
 {
 	int presult;
    //Check the queue is Null
-	queue_check(queue, "Error queue_dequeue()");
+	queue_check(queue, "Error queue_dequeue(): ");
 	
 	presult = pthread_mutex_lock( &(queue->data_mutex) );	
-	pthread_check( presult, "pthread_mutex_lock", __FILE__, __LINE__ );
+	pthread_check( presult, "Error queue_dequeue(): pthread_mutex_lock", __FILE__, __LINE__ );
 	if(queue->current_size != 0) {		
 		queue->element_free(&(queue->arr[queue->front]));
 		queue->front = queue->front + 1;
@@ -199,10 +199,10 @@ void queue_dequeue(queue_t* queue)
 	}	
 	else {
 		//Queue is empty, do nothing
-		printf("Queue is empty !!!\n");	
+		printf("Warning queue_dequeue(): Queue is empty !!!\n");
 	}
 	presult = pthread_mutex_unlock( &(queue->data_mutex) );
-	pthread_check( presult, "pthread_mutex_unlock", __FILE__, __LINE__ );	
+	pthread_check( presult, "Error queue_dequeue(): pthread_mutex_unlock", __FILE__, __LINE__ );
 }
 
 /*
@@ -211,9 +211,9 @@ void queue_dequeue(queue_t* queue)
 void queue_print(queue_t *queue)
 {
   // implementation goes here  
-  queue_check(queue, "queue_print()");
+  queue_check(queue, "Error queue_print()");
   if(queue->current_size == 0) {	  
-	  printf("Queue is empty !!!\n");	
+	  printf("Warning queue_print(): Queue is empty !!!\n");
 	  return;
   }
   
@@ -221,7 +221,7 @@ void queue_print(queue_t *queue)
   pos= queue->front;  
   element_t e = queue->arr[pos];  
   
-  printf("Current queue (starting from the front element): \n");
+  printf("Info queue_print(): Current queue (starting from the front element): \n");
   
   queue->element_print(e);
   while(pos != queue->rear)  
