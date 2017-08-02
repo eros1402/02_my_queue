@@ -237,3 +237,28 @@ void queue_print(queue_t *queue)
   } 
 }
 
+/*
+ **  Check empty queue
+ **  Return 1 if queue is empty
+ **  Return 0 if queue is not empty
+ */
+int queue_isEmpty(queue_t *queue)
+{
+	//Check the queue is Null
+	queue_check(queue, "Error queue_isEmpty(): ");
+	if(queue->current_size == 0) return 1;
+	else return 0;
+}
+
+/*
+ **  Check full queue
+ **  Return 1 if queue is full
+ **  Return 0 if queue is not full
+ */
+int queue_isFull(queue_t *queue)
+{
+	//Check the queue is Null
+	queue_check(queue, "Error queue_isFull(): ");
+	if(queue->current_size == queue->max_size) return 1;
+	else return 0;
+}

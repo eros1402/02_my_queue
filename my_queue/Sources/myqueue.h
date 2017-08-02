@@ -82,6 +82,20 @@ void queue_dequeue(queue_t* queue);
  */
 void queue_print(queue_t *queue);
 
+/*
+ **  Check empty queue
+ **  Return 1 if queue is empty
+ **  Return 0 if queue is not empty
+ */
+int queue_isEmpty(queue_t *queue);
+
+/*
+ **  Check full queue
+ **  Return 1 if queue is full
+ **  Return 0 if queue is not full
+ */
+int queue_isFull(queue_t *queue);
+
 #endif //MYQUEUE_
 
 
