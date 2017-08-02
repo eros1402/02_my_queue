@@ -13,13 +13,13 @@
 #include <assert.h>
 #include "myqueue.h"
 
-void int_element_copy(element_t *dest_element, element_t src_element);
-void int_element_print(element_t element);
-void int_element_free(element_t *element);
+void int_element_copy(q_element_t *dest_element, q_element_t src_element);
+void int_element_print(q_element_t element);
+void int_element_free(q_element_t *element);
 
 void test_int_queue ()
 {
-	  element_t *p=NULL;
+	  q_element_t *p=NULL;
 	  queue_t* queue = NULL;
 	  int *a;
 	  int *b;
@@ -34,13 +34,13 @@ void test_int_queue ()
 
 	  queue = queue_create(15, &int_element_copy, &int_element_free, &int_element_print);
 
-	  queue_enqueue(queue, (element_t)a, 1);
-	  queue_enqueue(queue, (element_t)b, 1);
-	  queue_enqueue(queue, (element_t)c, 1);
+	  queue_enqueue(queue, (q_element_t)a, 1);
+	  queue_enqueue(queue, (q_element_t)b, 1);
+	  queue_enqueue(queue, (q_element_t)c, 1);
 
-	  queue_enqueue(queue, (element_t)(&m), 1);
-	  queue_enqueue(queue, (element_t)(&n), 1);
-	  queue_enqueue(queue, (element_t)(&t), 1);
+	  queue_enqueue(queue, (q_element_t)(&m), 1);
+	  queue_enqueue(queue, (q_element_t)(&n), 1);
+	  queue_enqueue(queue, (q_element_t)(&t), 1);
 
 	//  int i = 0;
 	//  for(i = 0; i < 20; i++){
@@ -139,7 +139,7 @@ int main( void )
  * Print 1 element to stdout. 
  * If the definition of element_t changes, then this code needs to change as well.
  */
-void int_element_print(element_t element)
+void int_element_print(q_element_t element)
 {
   // implementation goes here
 	if(element != NULL) {
@@ -152,7 +152,7 @@ void int_element_print(element_t element)
  * dest_element should point to allocated memory - no memory allocation will be done in this function
  * If the definition of element_t changes, then this code needs to change as well.
  */
-void int_element_copy(element_t *dest_element, element_t src_element)
+void int_element_copy(q_element_t *dest_element, q_element_t src_element)
 {
   // implementation goes here
   *dest_element = src_element;
@@ -162,7 +162,7 @@ void int_element_copy(element_t *dest_element, element_t src_element)
  * Free the memory allocated to an element (if needed)
  * If the definition of element_t changes, then this code needs to change as well.
  */
-void int_element_free(element_t *element)
+void int_element_free(q_element_t *element)
 {
 	// implementation goes here
 	if(*element != NULL) {
@@ -175,7 +175,7 @@ void int_element_free(element_t *element)
 /*
  * Compare two element elements; returns 0(equal) or 1(unequal)  or -1 (one of elements is NULL)
  */
-int queue_element_compare(element_t x, element_t y)
+int queue_element_compare(q_element_t x, q_element_t y)
 {
 //	if(x == NULL || y == NULL) return -1;
 //

@@ -21,7 +21,7 @@
  * The real definition of 'a queue struct'
  */ 
 struct queue {
-  element_t *arr; 	// dynamic array containing data elements
+  q_element_t *arr; 	// dynamic array containing data elements
   int max_size;		// maximum size of the queue
   int current_size; // Counts number of current elements in the queue
   int front, rear;	// Position of front & rear element in queue
@@ -67,8 +67,8 @@ queue_t* queue_create(const int QUEUE_SIZE, element_copy_func *element_copy, ele
 	myqueue = (queue_t *) malloc(sizeof(queue_t)); // Queue memory allocated
 	if(myqueue == NULL) {return NULL;}	
 	myqueue->max_size = QUEUE_SIZE;
-	myqueue->arr = (element_t *) malloc(QUEUE_SIZE*sizeof(element_t));
-	mem_alloc_check((element_t *) myqueue->arr, "Error queue_create()");
+	myqueue->arr = (q_element_t *) malloc(QUEUE_SIZE*sizeof(q_element_t));
+	mem_alloc_check((q_element_t *) myqueue->arr, "Error queue_create()");
 	myqueue->current_size = 0;
 	myqueue->front = 0;
 	myqueue->rear = -1;		
@@ -113,7 +113,7 @@ void queue_free(queue_t** queue)
  **  (Does nothing if queue is full)
  **  Update 22-Jul-15: If the queue is full, overide the the rear when the allowed flag is set. Otherwise, do nothing
  */
-void queue_enqueue(queue_t* queue, element_t element, const int QUEUE_OVEWRITE_FLAG)
+void queue_enqueue(queue_t* queue, q_element_t element, const int QUEUE_OVEWRITE_FLAG)
 {
 	int presult;
   // implementation goes here
@@ -159,9 +159,9 @@ int queue_size(queue_t* queue)
  **  Return a pointer to the top element in the queue
  **  Returns NULL if queue is empty
  */
-element_t* queue_top(queue_t* queue){
+q_element_t* queue_top(queue_t* queue){
 	int presult;
-	element_t *p;
+	q_element_t *p;
 	// implementation goes here
 	queue_check(queue, "Error queue_top()");
 	
@@ -223,7 +223,7 @@ void queue_print(queue_t *queue)
   
   int pos;  
   pos= queue->front;  
-  element_t e = queue->arr[pos];  
+  q_element_t e = queue->arr[pos];  
   
   printf("********** queue_print() (from front to rear)\n");
   

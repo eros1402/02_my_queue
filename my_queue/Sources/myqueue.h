@@ -32,13 +32,13 @@ extern int allowed_overwrite_flag; // This flag is defined by user
 /*
  **  Define the type of element as void (can be any type) that will be stored in the queue
  */
-typedef void* element_t;
+typedef void* q_element_t;
 typedef struct queue queue_t;
 
 //*define CALLBACK function (function pointer)
-typedef void element_copy_func(element_t *, element_t);
-typedef void element_free_func(element_t *);
-typedef void element_print_func(element_t);
+typedef void element_copy_func(q_element_t *, q_element_t);
+typedef void element_free_func(q_element_t *);
+typedef void element_print_func(q_element_t);
 
 /*
  **  Creates (memory allocation!) and initializes the queue and prepares it for usage
@@ -52,7 +52,7 @@ queue_t* queue_create(const int QUEUE_SIZE, element_copy_func *element_copy, ele
  **  If queue is full, do nothing when QUEUE_OVERIDE_FLAG = 0
  **                  & overwrite the rear element when QUEUE_OVEWRITE_FLAG = 1
  */
-void queue_enqueue(queue_t* queue, element_t element, const int QUEUE_OVEWRITE_FLAG);
+void queue_enqueue(queue_t* queue, q_element_t element, const int QUEUE_OVEWRITE_FLAG);
 
 /*
  **  Delete the queue from memory; set queue to NULL
@@ -69,7 +69,7 @@ int queue_size(queue_t* queue);
  **  Return a pointer to the top element in the queue
  **  Returns NULL if queue is empty
  */
-element_t* queue_top(queue_t* queue);
+q_element_t* queue_top(queue_t* queue);
 
 /*
  **  Remove the top element from the queue
