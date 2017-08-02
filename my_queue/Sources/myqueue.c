@@ -73,10 +73,12 @@ queue_t* queue_create(const int QUEUE_SIZE, element_copy_func *element_copy, ele
 	myqueue->front = 0;
 	myqueue->rear = -1;		
 	
+	// init function pointers
 	myqueue->element_copy = element_copy;
 	myqueue->element_free = element_free;	
 	myqueue->element_print = element_print;
 	
+	// init thread-safe mutex
 	pthread_mutex_init(&(myqueue->data_mutex), NULL);	
 	return myqueue;
 }
@@ -233,7 +235,5 @@ void queue_print(queue_t *queue)
 	  e = queue->arr[pos];
 	  queue->element_print(e);
   } 
-
-  printf("\n");
 }
 
